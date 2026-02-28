@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Guard Pro — HCAI Pre-Submission Compliance Screening</title>
+  <meta name="description" content="Predict what HCAI reviewers will flag before you submit. Pre-submission compliance screening for California healthcare facility construction plans.">
+  <meta name="keywords" content="HCAI, OSHPD, plan review, compliance, healthcare construction, California Building Code, pre-submission screening">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  
+  <!-- Stripe.js for future Checkout integration -->
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    :root {
+      --navy: #1B3A5C;
+      --navy-deep: #0F2640;
+      --blue: #2E5A88;
+      --teal: #2A9D8F;
+      --teal-light: #3DBAA9;
+      --teal-pale: #E6F5F3;
+      --sky: #D5E8F0;
+      --red: #C62828;
+      --orange: #E65100;
+      --green: #2E7D32;
+      --gray-900: #1a1a2e;
+      --gray-700: #444;
+      --gray-500: #666;
+      --gray-400: #888;
+      --gray-300: #aaa;
+      --gray-200: #ddd;
+      --gray-100: #f0f0f0;
+      --gray-50: #f8f9fa;
+      --white: #fff;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'DM Sans', -apple-system, sans-serif;
+      --max-w: 1200px;
+      --section-pad: 100px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--gray-700);
+      line-height: 1.65;
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── UTILITY ─── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .animate-fade-up {
+      opacity: 0;
+      animation: fadeUp 0.7s ease-out forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(27,58,92,0.08);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(27,58,92,0.08); }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo svg { height: 36px; width: auto; }
+    .nav-brand {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+    .nav-brand span { color: var(--teal); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--gray-500);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-cta {
+      background: var(--teal) !important;
+      color: var(--white) !important;
+      padding: 10px 24px !important;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: background 0.2s, transform 0.15s !important;
+    }
+    .nav-cta:hover { background: var(--teal-light) !important; transform: translateY(-1px); }
+
+    .mobile-toggle {
+      display: none;
+      background: none; border: none; cursor: pointer; padding: 8px;
+    }
+    .mobile-toggle span {
+      display: block; width: 24px; height: 2px;
+      background: var(--navy); margin: 5px 0; transition: 0.3s;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 160px 0 var(--section-pad);
+      background: linear-gradient(165deg, var(--navy-deep) 0%, var(--navy) 50%, var(--blue) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(42,157,143,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(46,90,136,0.2) 0%, transparent 50%);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 80px;
+      background: var(--white);
+      clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 60%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-content { color: var(--white); }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(42,157,143,0.15);
+      border: 1px solid rgba(42,157,143,0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--teal-light);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--teal-light);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 4.5vw, 3.5rem);
+      line-height: 1.15;
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--teal-light);
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--teal);
+      color: var(--white);
+      padding: 16px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(42,157,143,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--teal-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(42,157,143,0.4);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      padding: 16px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+    }
+    .hero-card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 32px;
+      color: var(--white);
+    }
+    .hero-card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .hero-card-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .hero-card-header span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+    }
+    .finding-preview {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 3px solid;
+    }
+    .finding-preview.critical { border-color: var(--red); }
+    .finding-preview.major { border-color: var(--orange); }
+    .finding-preview.minor { border-color: var(--teal); }
+    .finding-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .finding-tag.critical { color: #ef5350; }
+    .finding-tag.major { color: #ff9800; }
+    .finding-tag.minor { color: var(--teal-light); }
+    .finding-text {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+    }
+    .finding-code {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 6px;
+      font-family: 'DM Sans', monospace;
+    }
+
+    /* ─── TRUST BAR ─── */
+    .trust-bar {
+      padding: 48px 0;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+    .trust-item { }
+    .trust-number {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .trust-label {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+
+    /* ─── SECTIONS (shared) ─── */
+    section {
+      padding: var(--section-pad) 0;
+    }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--gray-500);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-header .section-desc {
+      margin: 0 auto;
+    }
+
+    /* ─── PROBLEM / VALUE ─── */
+    .value-section { background: var(--white); }
+    .value-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .value-list { list-style: none; }
+    .value-list li {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .value-icon {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      background: var(--teal-pale);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .value-icon svg { width: 22px; height: 22px; color: var(--teal); }
+    .value-list h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .value-list p {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-section { background: var(--gray-50); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+    .step-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 32px 24px;
+      border: 1px solid var(--gray-200);
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(27,58,92,0.08);
+    }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      color: var(--teal);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .step-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+    .step-connector {
+      display: none; /* shown on desktop via pseudo-elements if desired */
+    }
+
+    /* ─── DISCIPLINES ─── */
+    .disciplines-section { background: var(--white); }
+    .disc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .disc-card {
+      padding: 28px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .disc-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 4px 20px rgba(42,157,143,0.08);
+    }
+    .disc-icon {
+      width: 40px; height: 40px;
+      background: var(--teal-pale);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+    }
+    .disc-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .disc-card p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* ─── PRICING ─── */
+    .pricing-section {
+      background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .price-card {
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .price-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(27,58,92,0.08);
+    }
+    .price-card.featured {
+      border-color: var(--teal);
+      box-shadow: 0 8px 32px rgba(42,157,143,0.12);
+    }
+    .price-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--teal);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 16px;
+      border-radius: 100px;
+    }
+    .price-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .price-card .price {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .price-card .price-note {
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      margin-bottom: 24px;
+    }
+    .price-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .price-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: var(--gray-700);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .price-features li::before {
+      content: '✓';
+      flex-shrink: 0;
+      color: var(--teal);
+      font-weight: 700;
+      margin-top: 1px;
+    }
+    .price-btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      font-family: var(--font-body);
+    }
+    .price-btn-primary {
+      background: var(--teal);
+      color: var(--white);
+    }
+    .price-btn-primary:hover {
+      background: var(--teal-light);
+      transform: translateY(-1px);
+    }
+    .price-btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 2px solid var(--gray-200);
+    }
+    .price-btn-outline:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+    .pricing-note {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.88rem;
+      color: var(--gray-400);
+    }
+
+    /* ─── SUBMISSION INSTRUCTIONS ─── */
+    .submit-section { background: var(--white); }
+    .submit-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .submit-instructions { display: flex; flex-direction: column; gap: 32px; }
+    .submit-step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .submit-step-num {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      background: var(--teal);
+      color: var(--white);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+    .submit-step h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .submit-step p {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .submit-format {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .submit-format code {
+      display: block;
+      font-family: 'DM Sans', monospace;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .submit-format-alt {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .submit-format-alt span {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      margin-bottom: 6px;
+      border-left: none;
+      padding-left: 0;
+    }
+    .submit-format-alt code {
+      margin-bottom: 0;
+    }
+    .submit-examples {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .submit-examples span {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      padding-left: 12px;
+      border-left: 2px solid var(--teal-pale);
+    }
+    .submit-types {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .submit-type {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 16px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      border: 1px solid var(--gray-200);
+    }
+    .submit-type strong {
+      font-size: 0.88rem;
+      color: var(--navy);
+    }
+    .submit-type span {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+    }
+    .submit-checklist {
+      list-style: none;
+      margin: 0;
+    }
+    .submit-checklist li {
+      font-size: 0.88rem;
+      color: var(--gray-500);
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+    .submit-checklist li::before {
+      content: '☐';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+    }
+    .submit-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 96px;
+    }
+    .submit-notice {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.85);
+      border-radius: 14px;
+      padding: 28px 24px;
+    }
+    .submit-notice-icon {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .submit-notice h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .submit-notice p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 0;
+    }
+    .submit-notice-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 16px 0;
+    }
+    .submit-services {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+    .submit-service {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 8px;
+      line-height: 1.5;
+    }
+    .submit-service strong { color: var(--teal-light); }
+    .submit-notice-tip {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      font-style: italic;
+      margin-top: 8px;
+    }
+    .submit-tip-card {
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+    }
+    .submit-tip-icon { font-size: 1.2rem; margin-bottom: 6px; }
+    .submit-tip-card h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .submit-tip-card p {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+    .submit-tip-card code {
+      font-size: 0.78rem;
+      background: var(--gray-50);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--navy);
+    }
+
+    /* ─── PRICING CALCULATOR ─── */
+    .calc-wrapper {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 36px;
+      max-width: 1000px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .calc-card {
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      border-radius: 18px;
+      padding: 40px 36px;
+      transition: border-color 0.3s;
+    }
+    .calc-card:focus-within { border-color: var(--teal); }
+    .calc-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .calc-header p {
+      font-size: 0.9rem;
+      color: var(--gray-400);
+      margin-bottom: 28px;
+    }
+    .calc-field { margin-bottom: 24px; }
+    .calc-field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .calc-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .calc-range {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--teal) 0%, var(--teal) 15%, var(--gray-200) 15%);
+      outline: none;
+      cursor: pointer;
+    }
+    .calc-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 3px solid var(--white);
+      box-shadow: 0 2px 8px rgba(42,157,143,0.3);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .calc-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .calc-range::-moz-range-thumb {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 3px solid var(--white);
+      box-shadow: 0 2px 8px rgba(42,157,143,0.3);
+      cursor: pointer;
+    }
+    .calc-num-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 8px 12px;
+      min-width: 100px;
+    }
+    .calc-num {
+      width: 48px;
+      border: none;
+      background: none;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--navy);
+      text-align: right;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    .calc-num::-webkit-outer-spin-button,
+    .calc-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .calc-num-label {
+      font-size: 0.82rem;
+      color: var(--gray-400);
+      font-weight: 500;
+    }
+
+    /* Toggle */
+    .calc-addon { margin-bottom: 24px; }
+    .calc-toggle {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      padding: 14px 16px;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .calc-toggle:hover { border-color: var(--teal); background: var(--teal-pale); }
+    .calc-toggle input { display: none; }
+    .calc-toggle-slider {
+      flex-shrink: 0;
+      width: 44px; height: 24px;
+      background: var(--gray-200);
+      border-radius: 12px;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .calc-toggle-slider::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: var(--white);
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .calc-toggle input:checked + .calc-toggle-slider {
+      background: var(--teal);
+    }
+    .calc-toggle input:checked + .calc-toggle-slider::after {
+      transform: translateX(20px);
+    }
+    .calc-toggle-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .calc-toggle-text strong {
+      font-size: 0.9rem;
+      color: var(--navy);
+    }
+    .calc-toggle-text span {
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      line-height: 1.4;
+    }
+
+    .calc-divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin: 24px 0;
+    }
+
+    /* Breakdown */
+    .calc-breakdown { margin-bottom: 8px; }
+    .calc-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      padding: 6px 0;
+    }
+    .calc-line-addon { color: var(--teal); font-weight: 500; }
+    .calc-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 2px solid var(--navy);
+      margin-bottom: 24px;
+    }
+    .calc-total span:first-child {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .calc-total span:last-child {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--navy);
+    }
+    .calc-cta {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      text-align: center;
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+    }
+
+    /* Includes */
+    .calc-includes {
+      background: var(--gray-50);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .calc-includes-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-400);
+      margin-bottom: 10px;
+    }
+    .calc-includes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .calc-includes-grid span {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+    }
+
+    /* Side cards */
+    .calc-side { display: flex; flex-direction: column; gap: 16px; }
+    .calc-side-card {
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+    .calc-side-card:hover { border-color: var(--teal); }
+    .calc-side-icon { font-size: 1.3rem; margin-bottom: 8px; }
+    .calc-side-card h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .calc-side-card p {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+
+    /* ─── REPORT PREVIEW ─── */
+    .report-section { background: var(--white); }
+    .report-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .report-features { list-style: none; }
+    .report-features li {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .report-check {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      background: var(--teal-pale);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .report-check svg { width: 14px; height: 14px; color: var(--teal); }
+    .report-features h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+    .report-features p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+    .report-mockup {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 32px;
+      position: relative;
+    }
+    .mockup-bar {
+      display: flex; gap: 6px; margin-bottom: 20px;
+    }
+    .mockup-bar span {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--gray-200);
+    }
+    .mockup-line {
+      height: 10px;
+      background: var(--gray-200);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .mockup-finding {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-left: 3px solid;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .mockup-finding.crit { border-left-color: var(--red); }
+    .mockup-finding.maj { border-left-color: var(--orange); }
+    .mockup-finding.min { border-left-color: var(--blue); }
+    .mockup-finding-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .mockup-id { font-weight: 700; font-size: 0.8rem; color: var(--navy); }
+    .mockup-sev {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+    }
+    .mockup-sev.crit { background: #ffebee; color: var(--red); }
+    .mockup-sev.maj { background: #fff3e0; color: var(--orange); }
+    .mockup-sev.min { background: var(--sky); color: var(--blue); }
+
+    /* ─── FAQ ─── */
+    .faq-section { background: var(--gray-50); }
+    .faq-grid {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 24px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      gap: 16px;
+    }
+    .faq-q:hover { color: var(--teal); }
+    .faq-q svg { flex-shrink: 0; transition: transform 0.3s; }
+    .faq-q.open svg { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+    }
+    .faq-a.open {
+      max-height: 400px;
+      padding-bottom: 24px;
+    }
+    .faq-a p {
+      font-size: 0.92rem;
+      color: var(--gray-500);
+      line-height: 1.7;
+    }
+
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      padding: var(--section-pad) 0;
+      background: linear-gradient(165deg, var(--navy-deep) 0%, var(--navy) 100%);
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(42,157,143,0.12) 0%, transparent 70%);
+    }
+    .cta-section .container { position: relative; z-index: 1; }
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 36px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.5);
+      padding: 48px 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 40px;
+    }
+    .footer-brand {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .footer-brand span { color: var(--teal-light); }
+    footer p { font-size: 0.88rem; line-height: 1.6; }
+    .footer-col h4 {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.88rem;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--teal-light); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+    .footer-bottom a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--teal-light); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      :root { --section-pad: 72px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual { display: none; }
+      .hero { padding: 140px 0 80px; }
+      .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .value-grid { grid-template-columns: 1fr; gap: 48px; }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .disc-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .calc-wrapper { grid-template-columns: 1fr; }
+      .calc-card { padding: 28px 20px; }
+      .submit-grid { grid-template-columns: 1fr; }
+      .submit-sidebar { position: static; }
+      .report-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .mobile-toggle { display: block; }
+    }
+    @media (max-width: 600px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 0C8.06 0 0 7.16 0 16c0 7.2 4.86 13.3 11.6 15.5L18 44l6.4-12.5C31.14 29.3 36 23.2 36 16 36 7.16 27.94 0 18 0z" fill="#1B3A5C"/>
+          <rect x="8" y="8" width="20" height="16" rx="2" stroke="#2A9D8F" stroke-width="1.5" fill="none"/>
+          <line x1="14" y1="8" x2="14" y2="24" stroke="#2A9D8F" stroke-width="1" opacity="0.5"/>
+          <line x1="20" y1="8" x2="20" y2="24" stroke="#2A9D8F" stroke-width="1" opacity="0.5"/>
+          <line x1="8" y1="13.5" x2="28" y2="13.5" stroke="#2A9D8F" stroke-width="1" opacity="0.5"/>
+          <line x1="8" y1="19" x2="28" y2="19" stroke="#2A9D8F" stroke-width="1" opacity="0.5"/>
+          <path d="M14 16l3 3 6-6" stroke="#2A9D8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="nav-brand">Plan Guard <span>Pro</span></div>
+      </a>
+      <div class="nav-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#disciplines">Disciplines</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#submit">Submit Plans</a>
+        <a href="#faq">FAQ</a>
+        <a href="#pricing" class="nav-cta">Get Started</a>
+      </div>
+      <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge animate-fade-up">Now Accepting Projects</div>
+          <h1 class="animate-fade-up delay-1">Know what HCAI will flag <em>before</em> you submit.</h1>
+          <p class="hero-sub animate-fade-up delay-2">
+            Pre-submission compliance screening grounded in empirical evidence from real HCAI plan reviews. Reduce backcheck cycles and submit with confidence.
+          </p>
+          <div class="hero-actions animate-fade-up delay-3">
+            <a href="#pricing" class="btn-primary">
+              Calculate Your Price
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+          </div>
+        </div>
+        <div class="hero-visual animate-fade-up delay-4">
+          <div class="hero-card">
+            <div class="hero-card-header">
+              <div class="hero-card-dot" style="background:#ef5350"></div>
+              <div class="hero-card-dot" style="background:#ff9800"></div>
+              <div class="hero-card-dot" style="background:var(--teal)"></div>
+              <span>Screening Report Preview</span>
+            </div>
+            <div class="finding-preview critical">
+              <div class="finding-tag critical">Critical · Tier 1</div>
+              <div class="finding-text">Short-circuit current rating not shown on one-line diagram for service entrance equipment</div>
+              <div class="finding-code">CEC 110.9 / PIN 38 · Sheet E-101</div>
+            </div>
+            <div class="finding-preview major">
+              <div class="finding-tag major">Major · Tier 1</div>
+              <div class="finding-text">Smoke compartment area exceeds 22,500 SF maximum without subdivision</div>
+              <div class="finding-code">CBC 407.5.1 · Sheet A-201</div>
+            </div>
+            <div class="finding-preview minor">
+              <div class="finding-tag minor">Minor · Tier 2</div>
+              <div class="finding-text">Branch circuit conduit sizes missing tick marks on floor plan routing</div>
+              <div class="finding-code">CEC 300.17 · Sheet E-301</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TRUST BAR ─── -->
+  <section class="trust-bar">
+    <div class="container">
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-number">3–5 Days</div>
+          <div class="trust-label">Turnaround on screening reports</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-number">8</div>
+          <div class="trust-label">Disciplines covered</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-number">3-Tier</div>
+          <div class="trust-label">Confidence-ranked findings</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-number">All 4</div>
+          <div class="trust-label">HCAI regions served</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── VALUE PROP ─── -->
+  <section class="value-section" id="about">
+    <div class="container">
+      <div class="value-grid">
+        <div>
+          <div class="section-label">The Problem</div>
+          <h2 class="section-title">HCAI plan review backchecks cost your team weeks and thousands of dollars.</h2>
+          <p class="section-desc" style="margin-bottom:36px;">
+            Every backcheck cycle means redesign, resubmission fees, and project delays. Most issues are predictable — if you know what reviewers actually look for.
+          </p>
+        </div>
+        <div>
+          <ul class="value-list">
+            <li>
+              <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              </div>
+              <div>
+                <h3>Grounded in Empirical Evidence</h3>
+                <p>Our screening is built on empirical data from real HCAI plan reviews — not generic code checklists. We know what reviewers actually enforce in practice.</p>
+              </div>
+            </li>
+            <li>
+              <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+              </div>
+              <div>
+                <h3>Confidence Tiered</h3>
+                <p>Findings are tiered by confidence: Tier 1 items will almost certainly be flagged, Tier 2 tightens your package, and Tier 3 strengthens beyond minimum compliance.</p>
+              </div>
+            </li>
+            <li>
+              <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <div>
+                <h3>Before Submission</h3>
+                <p>Catch issues when they're cheap to fix — before they become backcheck comments with hard deadlines and resubmission fees.</p>
+              </div>
+            </li>
+            <li>
+              <div class="value-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+              </div>
+              <div>
+                <h3>All Disciplines</h3>
+                <p>Structural, Architectural, Electrical, Mechanical, Plumbing, Fire & Life Safety, Medical Gas, and Cross-Discipline coordination.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─── -->
+  <section class="how-section" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Process</div>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-desc">From plan upload to prioritized findings in 3–5 business days.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Select & Pay</h3>
+          <p>Choose single-discipline or multi-discipline screening. Secure payment via Stripe — you're only charged for the disciplines you need.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>Upload Plans</h3>
+          <p>Submit your plan set as discipline-specific PDFs with your project details. See <a href="#submit" style="color:var(--teal);font-weight:600;">submission instructions</a> for file naming and delivery requirements.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>Expert Screening</h3>
+          <p>Your plans are screened by HCAI compliance specialists using discipline-specific audit protocols grounded in empirical evidence from real plan reviews.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h3>Receive Report</h3>
+          <p>Get a branded PDF report with prioritized findings, code references, correction directives, and a closeout checklist — delivered to your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DISCIPLINES ─── -->
+  <section class="disciplines-section" id="disciplines">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Coverage</div>
+        <h2 class="section-title">Discipline-Specific Deep Audits</h2>
+        <p class="section-desc">Each discipline is screened using purpose-built audit modules backed by empirical evidence from real HCAI reviewer enforcement patterns.</p>
+      </div>
+      <div class="disc-grid">
+        <div class="disc-card">
+          <div class="disc-icon">🏗</div>
+          <h3>Structural</h3>
+          <p>Load path documentation, seismic design parameters, special inspections, post-installed anchors, cross-reference verification against CBC 1603A/1604A.</p>
+        </div>
+        <div class="disc-card">
+          <div class="disc-icon">🏛</div>
+          <h3>Architectural</h3>
+          <p>Healthcare space requirements (CBC 1224), accessibility (CBC 11B), room function nomenclature, functional program compliance, finish schedules.</p>
+        </div>
+        <div class="disc-card">
+          <div class="disc-icon">⚡</div>
+          <h3>Electrical</h3>
+          <p>Essential electrical systems (CEC 517), fault current ratings, panelboard descriptions, branch circuit coordination, OCPD studies (PIN 38/70).</p>
+        </div>
+        <div class="disc-card">
+          <div class="disc-icon">❄️</div>
+          <h3>Mechanical / HVAC</h3>
+          <p>Air balance verification, zone valve schedules, temperature indicator outlets, fire/smoke damper coordination, ventilation rates per CBC 1224.</p>
+        </div>
+        <div class="disc-card">
+          <div class="disc-icon">🔥</div>
+          <h3>Fire & Life Safety</h3>
+          <p>Smoke compartment areas, travel distances, exit capacity, fire-rated assemblies, care suite compliance, door rating coordination.</p>
+        </div>
+        <div class="disc-card">
+          <div class="disc-icon">🔧</div>
+          <h3>Plumbing & Medical Gas</h3>
+          <p>Plumbing fixture schedules, medical gas outlet/alarm coverage, zone valve box accessibility, gas-specific ventilation requirements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRICING ─── -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-title">Invest in a Cleaner Submission</h2>
+        <p class="section-desc">One screening now saves weeks of backcheck cycles later. Choose the coverage that fits your project.</p>
+      </div>
+      <div class="calc-wrapper">
+        <div class="calc-card">
+          <div class="calc-header">
+            <h3>Screening Estimate</h3>
+            <p>Enter your sheet count to see your price instantly.</p>
+          </div>
+
+          <!-- Sheet Count Input -->
+          <div class="calc-field">
+            <label for="sheetCount">Number of Sheets in Submittal</label>
+            <div class="calc-slider-row">
+              <input type="range" id="sheetSlider" min="1" max="100" value="15" class="calc-range" oninput="updateCalc('slider')">
+              <div class="calc-num-wrap">
+                <input type="number" id="sheetCount" min="1" max="100" value="15" class="calc-num" oninput="updateCalc('input')">
+                <span class="calc-num-label">sheets</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calc Add-On Toggle -->
+          <div class="calc-addon">
+            <label class="calc-toggle">
+              <input type="checkbox" id="calcAddon" onchange="updateCalc()">
+              <span class="calc-toggle-slider"></span>
+              <span class="calc-toggle-text">
+                <strong>Add Structural Calc Review</strong>
+                <span>Load path verification, seismic parameter check — +$150</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Divider -->
+          <div class="calc-divider"></div>
+
+          <!-- Price Breakdown -->
+          <div class="calc-breakdown">
+            <div class="calc-line">
+              <span>Base fee</span>
+              <span>$249</span>
+            </div>
+            <div class="calc-line" id="calcLine1">
+              <span><span id="sheetDesc1">15 sheets</span> × $25</span>
+              <span id="sheetCost1">$375</span>
+            </div>
+            <div class="calc-line" id="calcLine2" style="display:none;">
+              <span><span id="sheetDesc2">0 sheets</span> × $20</span>
+              <span id="sheetCost2">$0</span>
+            </div>
+            <div class="calc-line calc-line-addon" id="calcLineAddon" style="display:none;">
+              <span>Structural calc review</span>
+              <span>$150</span>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="calc-total">
+            <span>Total</span>
+            <span id="calcTotal">$624</span>
+          </div>
+
+          <!-- CTA -->
+          <!-- STRIPE PAYMENT LINK — Replace href with your Stripe Payment Link -->
+          <a href="YOUR_STRIPE_PAYMENT_LINK" id="calcCta" class="price-btn price-btn-primary calc-cta">Get Started →</a>
+
+          <!-- Includes -->
+          <div class="calc-includes">
+            <div class="calc-includes-title">Every screening includes:</div>
+            <div class="calc-includes-grid">
+              <span>✓ Confidence-tiered findings</span>
+              <span>✓ Specific code citations</span>
+              <span>✓ Correction directives</span>
+              <span>✓ Branded PDF report</span>
+              <span>✓ Closeout checklist</span>
+              <span>✓ 3–5 business day delivery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side info -->
+        <div class="calc-side">
+          <div class="calc-side-card">
+            <div class="calc-side-icon">📋</div>
+            <h4>What counts as a sheet?</h4>
+            <p>Every page in your submittal set — architectural, structural, MEP, fire & life safety, cover sheets, and details. Count what you're sending to HCAI.</p>
+          </div>
+          <div class="calc-side-card">
+            <div class="calc-side-icon">🔢</div>
+            <h4>How pricing works</h4>
+            <p>$249 base fee plus $25 per sheet for the first 30 sheets, then $20 per sheet after that. Larger projects benefit from the reduced rate.</p>
+          </div>
+          <div class="calc-side-card">
+            <div class="calc-side-icon">📐</div>
+            <h4>Calc package add-on</h4>
+            <p>Add structural calculation review for $150. Covers load path verification, seismic parameter checks, and design criteria documentation.</p>
+          </div>
+          <div class="calc-side-card">
+            <div class="calc-side-icon">💬</div>
+            <h4>Over 100 sheets?</h4>
+            <p><a href="mailto:info@planguardpro.com" style="color:var(--teal);font-weight:600;">Contact us</a> for a custom quote on large-scale submittals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SUBMISSION INSTRUCTIONS ─── -->
+  <section class="submit-section" id="submit">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Submission</div>
+        <h2 class="section-title">How to Submit Your Plans</h2>
+        <p class="section-desc">Follow these steps to ensure your screening gets started without delays.</p>
+      </div>
+      <div class="submit-grid">
+        <!-- Left: Instructions -->
+        <div class="submit-instructions">
+          <div class="submit-step">
+            <div class="submit-step-num">1</div>
+            <div>
+              <h3>Separate Files by Discipline</h3>
+              <p>Split your plan set into individual PDF files by discipline. Name each file using your HCAI application number (if available) or your firm's project number:</p>
+              <div class="submit-format">
+                <code>[HCAI App Number]_[Discipline].pdf</code>
+                <div class="submit-examples">
+                  <span>S241906-33-00_Architectural.pdf</span>
+                  <span>S241906-33-00_Structural.pdf</span>
+                  <span>S241906-33-00_Electrical.pdf</span>
+                  <span>S241906-33-00_Mechanical.pdf</span>
+                  <span>S241906-33-00_Plumbing.pdf</span>
+                  <span>S241906-33-00_FireLifeSafety.pdf</span>
+                </div>
+                <div class="submit-format-alt">
+                  <span>If no HCAI number is available, use your firm's project number:</span>
+                  <code>[FirmProjectNumber]_[Discipline].pdf</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="submit-step">
+            <div class="submit-step-num">2</div>
+            <div>
+              <h3>Identify Submission Type</h3>
+              <p>Let us know which type of submission you're screening for:</p>
+              <div class="submit-types">
+                <div class="submit-type">
+                  <strong>New Submission</strong>
+                  <span>Initial plan set for HCAI review (BC0)</span>
+                </div>
+                <div class="submit-type">
+                  <strong>ACD (Amended Construction Document)</strong>
+                  <span>Revisions to previously approved construction documents</span>
+                </div>
+                <div class="submit-type">
+                  <strong>DSI (Deferred Submittal Item)</strong>
+                  <span>Post-approval deferred items for separate review</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="submit-step">
+            <div class="submit-step-num">3</div>
+            <div>
+              <h3>Upload Your Files</h3>
+              <p>After payment, you'll be directed to our secure upload form. Upload your discipline PDFs, supporting documents, and project details — files go directly to our Google Drive. Include:</p>
+              <ul class="submit-checklist">
+                <li>Facility name</li>
+                <li>HCAI application number (if available)</li>
+                <li>Submission type (New / ACD / DSI)</li>
+                <li>Total sheet count</li>
+                <li>Project-specific TIO (Title, Intent & Objectives)</li>
+                <li>Project narrative / scope description</li>
+                <li>Any other supporting documents being submitted to HCAI (e.g., functional program, equipment lists, hazardous materials inventory, geotechnical report)</li>
+                <li>Any specific areas of concern</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: File size notice + tips -->
+        <div class="submit-sidebar">
+          <div class="submit-notice">
+            <div class="submit-notice-icon">☁️</div>
+            <h4>Direct Upload to Google Drive</h4>
+            <p>After payment, you'll be directed to a secure upload form. Your files go straight to our Google Drive — no email attachments, no file size headaches.</p>
+            <div class="submit-notice-divider"></div>
+            <h4>Google Form upload limits:</h4>
+            <div class="submit-services">
+              <div class="submit-service">
+                <strong>Per file:</strong> up to 10 GB
+              </div>
+              <div class="submit-service">
+                <strong>Accepted formats:</strong> PDF files for plans, any format for supporting docs
+              </div>
+            </div>
+            <p class="submit-notice-tip">Need to submit after the initial upload? Email additional files to <a href="mailto:submit@planguardpro.com" style="color:var(--teal-light)">submit@planguardpro.com</a></p>
+          </div>
+
+          <div class="submit-tip-card">
+            <div class="submit-tip-icon">📄</div>
+            <h4>Supporting Documents Matter</h4>
+            <p>The TIO, project narrative, and any documentation you're submitting to HCAI helps us screen your plans the same way a reviewer would — with full context. The more complete your submission, the more accurate your screening.</p>
+          </div>
+
+          <div class="submit-tip-card">
+            <div class="submit-tip-icon">💡</div>
+            <h4>Pro Tip</h4>
+            <p>Include structural calculations as a separate file if you've added the Calc Review add-on: <code>[HCAIAppNumber]_StructuralCalcs.pdf</code></p>
+          </div>
+
+          <div class="submit-tip-card">
+            <div class="submit-tip-icon">⏱</div>
+            <h4>After You Submit</h4>
+            <p>You'll receive a confirmation email within 1 business day acknowledging receipt and confirming your screening scope and timeline.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── REPORT PREVIEW ─── -->
+  <section class="report-section" id="report">
+    <div class="container">
+      <div class="report-grid">
+        <div>
+          <div class="section-label">Deliverable</div>
+          <h2 class="section-title">A Report Your Team Can Act On</h2>
+          <p class="section-desc" style="margin-bottom:32px;">
+            Every screening delivers a professional PDF report designed for immediate use by your design team.
+          </p>
+          <ul class="report-features">
+            <li>
+              <div class="report-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l4 4 6-7"/></svg></div>
+              <div>
+                <h4>Severity & Confidence Tiers</h4>
+                <p>Each finding is classified Critical/Major/Minor/Advisory with confidence tiers so you know exactly what to fix first.</p>
+              </div>
+            </li>
+            <li>
+              <div class="report-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l4 4 6-7"/></svg></div>
+              <div>
+                <h4>Specific Code Citations</h4>
+                <p>Every finding includes the exact CBC/CEC/CMC section, PIN reference, or HCAI administrative rule — ready for your code response.</p>
+              </div>
+            </li>
+            <li>
+              <div class="report-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l4 4 6-7"/></svg></div>
+              <div>
+                <h4>Correction Directives</h4>
+                <p>Actionable instructions your team can implement immediately — not vague observations.</p>
+              </div>
+            </li>
+            <li>
+              <div class="report-check"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 7l4 4 6-7"/></svg></div>
+              <div>
+                <h4>Closeout Checklist</h4>
+                <p>Printable checklist organized by priority so you can track corrections through your QC workflow.</p>
+              </div>
+            </li>
+          </ul>
+          <a href="/PlanGuardPro_Sample_Report.pdf" target="_blank" class="price-btn price-btn-primary" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Sample Report (PDF)
+          </a>
+        </div>
+        <div class="report-mockup">
+          <div class="mockup-bar"><span></span><span></span><span></span></div>
+          <div style="font-weight:700;color:var(--navy);font-size:0.9rem;margin-bottom:4px;">Executive Summary</div>
+          <div style="display:flex;gap:12px;margin-bottom:20px;">
+            <div style="background:#ffebee;padding:8px 14px;border-radius:8px;text-align:center;flex:1;">
+              <div style="font-weight:700;color:var(--red);font-size:1.3rem;">3</div>
+              <div style="font-size:0.65rem;color:var(--red);font-weight:600;">CRITICAL</div>
+            </div>
+            <div style="background:#fff3e0;padding:8px 14px;border-radius:8px;text-align:center;flex:1;">
+              <div style="font-weight:700;color:var(--orange);font-size:1.3rem;">7</div>
+              <div style="font-size:0.65rem;color:var(--orange);font-weight:600;">MAJOR</div>
+            </div>
+            <div style="background:var(--sky);padding:8px 14px;border-radius:8px;text-align:center;flex:1;">
+              <div style="font-weight:700;color:var(--blue);font-size:1.3rem;">12</div>
+              <div style="font-size:0.65rem;color:var(--blue);font-weight:600;">MINOR</div>
+            </div>
+            <div style="background:var(--gray-100);padding:8px 14px;border-radius:8px;text-align:center;flex:1;">
+              <div style="font-weight:700;color:var(--gray-500);font-size:1.3rem;">5</div>
+              <div style="font-size:0.65rem;color:var(--gray-500);font-weight:600;">ADVISORY</div>
+            </div>
+          </div>
+          <div class="mockup-finding crit">
+            <div class="mockup-finding-head">
+              <span class="mockup-id">ELEC-001</span>
+              <span class="mockup-sev crit">CRITICAL</span>
+            </div>
+            <div style="font-size:0.78rem;color:var(--gray-700);margin-bottom:4px;">Fault current rating not documented</div>
+            <div style="font-size:0.7rem;color:var(--gray-400);">CEC 110.9 · PIN 38 · Sheet E-101</div>
+          </div>
+          <div class="mockup-finding maj">
+            <div class="mockup-finding-head">
+              <span class="mockup-id">STRU-003</span>
+              <span class="mockup-sev maj">MAJOR</span>
+            </div>
+            <div style="font-size:0.78rem;color:var(--gray-700);margin-bottom:4px;">Seismic design parameters incomplete</div>
+            <div style="font-size:0.7rem;color:var(--gray-400);">CBC 1603A.1 · Sheet S-001</div>
+          </div>
+          <div class="mockup-finding min">
+            <div class="mockup-finding-head">
+              <span class="mockup-id">ARCH-012</span>
+              <span class="mockup-sev min">MINOR</span>
+            </div>
+            <div style="font-size:0.78rem;color:var(--gray-700);margin-bottom:4px;">Room nomenclature inconsistent with FP</div>
+            <div style="font-size:0.7rem;color:var(--gray-400);">CAC 7-119 · Sheet A-301</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ ─── -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title">Common Questions</h2>
+      </div>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What types of HCAI projects do you screen?
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12"/></svg>
+          </button>
+          <div class="faq-a">
+            <p>We screen OSHPD 1 (hospital), OSHPD 2 (skilled nursing), and OSHPD 3 (clinic) projects across all construction types — new construction, tenant improvements, seismic retrofits, and additions. Our screening coverage is strongest for OSHPD 1 hospital projects and growing rapidly across all classifications.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How is this different from a regular code review?
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12"/></svg>
+          </button>
+          <div class="faq-a">
+            <p>Generic code reviews check against the code book. Our screening is grounded in empirical evidence from real HCAI plan reviews — we know which code sections get enforced in practice, which details draw scrutiny, and which patterns trigger comments. This means we predict real-world review outcomes, not just theoretical compliance.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What do I need to submit?
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12"/></svg>
+          </button>
+          <div class="faq-a">
+            <p>Submit your construction plan set as PDF files along with your HCAI application number (if available), facility name, project scope description, and the disciplines you'd like screened. Calculation packages can be included for the calc review add-on.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What's the turnaround time?
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12"/></svg>
+          </button>
+          <div class="faq-a">
+            <p>Standard delivery is 3–5 business days. Multi-discipline packages receive priority processing and typically deliver within 3 business days. Rush delivery may be available — contact us to discuss your timeline.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Does this guarantee HCAI approval?
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12"/></svg>
+          </button>
+          <div class="faq-a">
+            <p>No — and we're transparent about that. Plan Guard Pro is a pre-submission screening service, not a guarantee of approval. Our goal is to identify the most likely reviewer comments before you submit, significantly reducing the number and severity of backcheck items. Think of it as empirically informed quality control for your plan set.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What format is the report?
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12"/></svg>
+          </button>
+          <div class="faq-a">
+            <p>You receive a professionally branded PDF report with an executive summary dashboard, detailed finding cards organized by severity and discipline, specific code citations, correction directives, and a printable closeout checklist. The report is designed to integrate directly into your team's QC workflow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to submit cleaner plans?</h2>
+      <p>Get your pre-submission screening started today. Reduce backchecks, save time, and submit with confidence.</p>
+      <div class="cta-actions">
+        <a href="#pricing" class="btn-primary">
+          Choose Your Package
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="mailto:info@planguardpro.com" class="btn-secondary">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Plan Guard <span>Pro</span></div>
+          <p>Empirically grounded HCAI pre-submission compliance screening for healthcare construction professionals. Based in California, serving design teams statewide.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Service</h4>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#disciplines">Disciplines</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#submit">Submit Plans</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:info@planguardpro.com">info@planguardpro.com</a>
+          <a href="#pricing">Get Started</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Plan Guard Pro. All rights reserved.</span>
+        <div>
+          <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── NAV SCROLL EFFECT ───
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // ─── FAQ TOGGLE ───
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const isOpen = btn.classList.contains('open');
+      
+      // Close all
+      document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      
+      if (!isOpen) {
+        btn.classList.add('open');
+        answer.classList.add('open');
+      }
+    }
+
+    // ─── INTERSECTION OBSERVER FOR ANIMATIONS ───
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.step-card, .disc-card, .price-card').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.animation = `fadeUp 0.6s ease-out ${i * 0.1}s forwards`;
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
+    });
+
+    // ─── MOBILE NAV ───
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('mobile-open');
+      });
+    });
+
+    // ─── PRICING CALCULATOR ───
+    function updateCalc(source) {
+      const slider = document.getElementById('sheetSlider');
+      const input = document.getElementById('sheetCount');
+
+      // Sync slider ↔ input based on which triggered the update
+      if (source === 'slider') {
+        input.value = slider.value;
+      } else if (source === 'input') {
+        let v = parseInt(input.value) || 1;
+        v = Math.min(Math.max(v, 1), 100);
+        input.value = v;
+        slider.value = v;
+      }
+
+      let sheets = parseInt(input.value) || 1;
+      sheets = Math.min(Math.max(sheets, 1), 100);
+
+      // Update slider fill
+      const pct = ((sheets - 1) / 99) * 100;
+      slider.style.background = `linear-gradient(to right, var(--teal) 0%, var(--teal) ${pct}%, var(--gray-200) ${pct}%)`;
+
+      // Pricing: $249 base + $25/sheet first 30, $20/sheet after 30
+      const BASE = 249;
+      const RATE_1 = 25;
+      const RATE_2 = 20;
+      const THRESHOLD = 30;
+      const CALC_ADDON_PRICE = 150;
+
+      let tier1Sheets = Math.min(sheets, THRESHOLD);
+      let tier2Sheets = Math.max(0, sheets - THRESHOLD);
+      let tier1Cost = tier1Sheets * RATE_1;
+      let tier2Cost = tier2Sheets * RATE_2;
+
+      const calcAddon = document.getElementById('calcAddon').checked;
+      const addonCost = calcAddon ? CALC_ADDON_PRICE : 0;
+      const total = BASE + tier1Cost + tier2Cost + addonCost;
+
+      // Update breakdown
+      document.getElementById('sheetDesc1').textContent =
+        tier2Sheets > 0 ? `First ${tier1Sheets} sheets` : `${tier1Sheets} sheet${tier1Sheets > 1 ? 's' : ''}`;
+      document.getElementById('sheetCost1').textContent = `$${tier1Cost.toLocaleString()}`;
+
+      const line2 = document.getElementById('calcLine2');
+      if (tier2Sheets > 0) {
+        line2.style.display = 'flex';
+        document.getElementById('sheetDesc2').textContent = `Next ${tier2Sheets} sheet${tier2Sheets > 1 ? 's' : ''}`;
+        document.getElementById('sheetCost2').textContent = `$${tier2Cost.toLocaleString()}`;
+      } else {
+        line2.style.display = 'none';
+      }
+
+      document.getElementById('calcLineAddon').style.display = calcAddon ? 'flex' : 'none';
+      document.getElementById('calcTotal').textContent = `$${total.toLocaleString()}`;
+    }
+
+    // Initialize on load
+    updateCalc();
+
+    // ─── STRIPE INTEGRATION ───
+    // ===========================================================================
+    // STRIPE PAYMENT LINKS (Simplest — No Backend Required)
+    // ===========================================================================
+    // 1. Go to Stripe Dashboard → Payment Links → Create Payment Link
+    // 2. Create 1 Payment Link with an adjustable quantity or custom amount,
+    //    OR create a simple link and handle exact pricing via email confirmation.
+    //    Simplest approach: create a Payment Link and add custom fields:
+    //    - "Number of Sheets" (required)
+    //    - "Facility Name" (required)
+    //    - "HCAI Application Number" (optional)
+    //    - "Include Calc Package? (Yes/No)" (optional)
+    // 3. Replace YOUR_STRIPE_PAYMENT_LINK in the calculator button above.
+    //    Example: https://buy.stripe.com/your_unique_link_id
+    // 4. After payment, verify sheet count and send invoice adjustment if needed,
+    //    or use Stripe Invoicing for exact amounts.
+    //
+    // ALTERNATIVE: Use Stripe Invoicing for exact pricing:
+    //    1. Customer clicks "Get Started" → goes to an intake form (Tally, Typeform, etc.)
+    //    2. Customer fills in sheet count, facility, disciplines
+    //    3. You create a Stripe Invoice for the exact amount and email it
+    //    4. Customer pays the invoice → you begin the review
+    //    This gives you exact pricing control with zero code.
+    //
+    // ===========================================================================
+    // OPTION B: STRIPE CHECKOUT (Requires a simple backend — for future API phase)
+    // ===========================================================================
+    // When you're ready for a more integrated flow, use Stripe Checkout:
+    //
+    // Frontend (add to this page):
+    // const stripe = Stripe('pk_live_YOUR_PUBLISHABLE_KEY');
+    //
+    // document.querySelectorAll('[data-plan]').forEach(btn => {
+    //   btn.addEventListener('click', async (e) => {
+    //     e.preventDefault();
+    //     const plan = btn.dataset.plan;
+    //     const res = await fetch('/api/create-checkout-session', {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ plan })
+    //     });
+    //     const { sessionId } = await res.json();
+    //     await stripe.redirectToCheckout({ sessionId });
+    //   });
+    // });
+    //
+    // Backend (Node.js / Express):
+    // See the companion file stripe-server.js for the server-side implementation.
+    // ===========================================================================
+  </script>
+
+  <style>
+    /* Mobile nav overlay */
+    @media (max-width: 900px) {
+      .nav-links.mobile-open {
+        display: flex !important;
+        flex-direction: column;
+        position: fixed;
+        top: 72px; left: 0; right: 0;
+        background: var(--white);
+        padding: 24px;
+        gap: 20px;
+        border-bottom: 1px solid var(--gray-200);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        z-index: 99;
+      }
+      .nav-links.mobile-open .nav-cta {
+        text-align: center;
+      }
+    }
+  </style>
+</body>
+</html>

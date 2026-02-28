@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You — Plan Guard Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1B3A5C;
+      --navy-deep: #0F2640;
+      --teal: #2A9D8F;
+      --teal-light: #3DBAA9;
+      --teal-pale: #E6F5F3;
+      --gray-500: #666;
+      --gray-200: #ddd;
+      --gray-50: #f8f9fa;
+      --white: #fff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: #444;
+      line-height: 1.65;
+      background: var(--gray-50);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(27,58,92,0.06);
+      border: 1px solid var(--gray-200);
+      text-align: center;
+    }
+    .check-circle {
+      width: 72px; height: 72px;
+      background: var(--teal-pale);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .check-circle svg { width: 36px; height: 36px; color: var(--teal); }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-500);
+      margin-bottom: 32px;
+    }
+    .ref-box {
+      background: var(--navy);
+      color: var(--white);
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .ref-box-left { text-align: left; }
+    .ref-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+      margin-bottom: 2px;
+    }
+    .ref-id {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--teal-light);
+      word-break: break-all;
+    }
+    .ref-note {
+      font-size: 0.72rem;
+      opacity: 0.5;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .steps {
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      background: var(--teal-pale);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--teal);
+    }
+    .step h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .step p {
+      font-size: 0.88rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+    .form-embed {
+      margin: 0 0 24px;
+      text-align: left;
+    }
+    .form-embed iframe {
+      width: 100%;
+      min-height: 1400px;
+      border: none;
+      border-radius: 12px;
+    }
+    .alt-upload p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      margin-bottom: 12px;
+    }
+    .email-box {
+      background: var(--navy);
+      color: var(--white);
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .email-box .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+      margin-bottom: 4px;
+    }
+    .email-box a {
+      color: var(--teal-light);
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+    }
+    .back-link {
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+    @media (max-width: 600px) {
+      .card { padding: 32px 20px; }
+      .ref-box { flex-direction: column; text-align: center; }
+      .ref-box-left { text-align: center; }
+      .ref-note { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+    <h1>Payment Received</h1>
+    <p class="subtitle">Thank you for choosing Plan Guard Pro. Upload your plans below to get started.</p>
+
+    <!-- Order Reference (auto-populated from Stripe session ID) -->
+    <div class="ref-box" id="refBox" style="display:none;">
+      <div class="ref-box-left">
+        <div class="ref-label">Order Reference</div>
+        <div class="ref-id" id="refId"></div>
+      </div>
+      <div class="ref-note">Auto-linked to<br>your upload</div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Upload Your Plans</h3>
+          <p>Use the form below to upload your discipline-specific PDFs, project details, and supporting documents (TIO, narrative, functional program, etc.). Files upload directly to our secure Google Drive.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Confirmation</h3>
+          <p>You'll receive an email confirmation within 1 business day acknowledging receipt and confirming your screening scope and timeline.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Screening & Delivery</h3>
+          <p>Your branded PDF screening report will be delivered to your email within 3–5 business days (priority for larger packages).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Google Form — dynamically pre-filled with order reference -->
+    <div class="form-embed">
+      <iframe id="formFrame" src="" title="Plan Submission Form">Loading form…</iframe>
+    </div>
+
+    <div class="alt-upload">
+      <p>Having trouble with the form? Email your files directly to:</p>
+    </div>
+
+    <div class="email-box">
+      <div class="label">Alternate submission</div>
+      <a href="mailto:submit@planguardpro.com">submit@planguardpro.com</a>
+    </div>
+
+    <a href="/" class="back-link">← Back to planguardpro.com</a>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════════
+    // CONFIGURATION — Replace these two values with your actual IDs
+    // ═══════════════════════════════════════════════════════════════════
+    //
+    // 1. GOOGLE_FORM_BASE_URL:
+    //    Open your Google Form → Send → Link icon → Copy URL
+    //    Example: https://docs.google.com/forms/d/e/1FAIpQLSe.../viewform
+    //
+    // 2. ORDER_REF_ENTRY_ID:
+    //    This links Stripe payments to form submissions automatically.
+    //    To find it:
+    //      a. Open your Google Form in edit mode
+    //      b. Click 3-dot menu → "Get pre-filled link"
+    //      c. Type "TEST123" in the "Order Reference" field
+    //      d. Click "Get link" at bottom → "Copy link"
+    //      e. In the copied URL, find: entry.1234567890=TEST123
+    //      f. Copy that full parameter name: entry.1234567890
+    //
+    const GOOGLE_FORM_BASE_URL = 'YOUR_GOOGLE_FORM_URL_HERE';
+    const ORDER_REF_ENTRY_ID = 'entry.YOUR_ENTRY_ID_HERE';
+    // ═══════════════════════════════════════════════════════════════════
+
+    function init() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+
+      let formUrl = GOOGLE_FORM_BASE_URL;
+
+      if (sessionId) {
+        // Show the order reference on the page
+        const shortId = sessionId.length > 30
+          ? sessionId.substring(0, 28) + '...'
+          : sessionId;
+        document.getElementById('refId').textContent = shortId;
+        document.getElementById('refId').title = sessionId;
+        document.getElementById('refBox').style.display = 'flex';
+
+        // Pre-fill the Order Reference field in the Google Form
+        const sep = GOOGLE_FORM_BASE_URL.includes('?') ? '&' : '?';
+        formUrl = GOOGLE_FORM_BASE_URL + sep
+          + ORDER_REF_ENTRY_ID + '=' + encodeURIComponent(sessionId)
+          + '&embedded=true';
+      } else {
+        const sep = GOOGLE_FORM_BASE_URL.includes('?') ? '&' : '?';
+        formUrl = GOOGLE_FORM_BASE_URL + sep + 'embedded=true';
+      }
+
+      document.getElementById('formFrame').src = formUrl;
+    }
+
+    init();
+  </script>
+</body>
+</html>
