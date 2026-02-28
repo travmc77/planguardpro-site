@@ -1562,8 +1562,7 @@
           </div>
 
           <!-- CTA -->
-          <!-- STRIPE PAYMENT LINK — Replace href with your Stripe Payment Link -->
-          <a href="YOUR_STRIPE_PAYMENT_LINK" id="calcCta" class="price-btn price-btn-primary calc-cta">Get Started →</a>
+          <a href="#" id="calcCta" class="price-btn price-btn-primary calc-cta" onclick="sendQuoteRequest(event)">Get Started →</a>
 
           <!-- Includes -->
           <div class="calc-includes">
@@ -2033,6 +2032,36 @@
 
     // Initialize on load
     updateCalc();
+
+    // ─── EMAIL QUOTE REQUEST ───
+    function sendQuoteRequest(e) {
+      e.preventDefault();
+      const sheets = parseInt(document.getElementById('sheetCount').value) || 1;
+      const calcAddon = document.getElementById('calcAddon').checked;
+      const total = document.getElementById('calcTotal').textContent;
+
+      const subject = encodeURIComponent(`Plan Guard Pro Screening Request — ${sheets} sheets`);
+      const body = encodeURIComponent(
+`Hi Plan Guard Pro,
+
+I'd like to request a pre-submission screening.
+
+Sheet count: ${sheets}
+Structural calc add-on: ${calcAddon ? 'Yes (+$150)' : 'No'}
+Estimated total: ${total}
+
+Facility name: 
+HCAI application number (if known): 
+Submission type (BC0 / ACD / DSI): 
+Disciplines needed: 
+
+Please send me an invoice to proceed.
+
+Thank you`
+      );
+
+      window.location.href = `mailto:submit@planguardpro.com?subject=${subject}&body=${body}`;
+    }
 
     // ─── STRIPE INTEGRATION ───
     // ===========================================================================
